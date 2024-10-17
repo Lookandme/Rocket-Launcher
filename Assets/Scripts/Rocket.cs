@@ -1,9 +1,18 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
     private Rigidbody2D _rb2d;
     private float fuel = 100f;
+    private int score = 0;
+    private int highScore = 0;
+    
+
+    [SerializeField] private TextMeshProUGUI currentScoreTxt;
+    [SerializeField]private TextMeshProUGUI highScoreTxt;
     
     
     
@@ -15,8 +24,18 @@ public class Rocket : MonoBehaviour
     {
         // TODO : Rigidbody2D 컴포넌트를 가져옴(캐싱) 
         _rb2d = GetComponent<Rigidbody2D>();
+
+       
     }
-    
+    private void Update()
+    {
+        SetScore();
+        ChageFuel();
+
+
+
+    }
+
 
     public void Shoot()
     {
@@ -30,7 +49,34 @@ public class Rocket : MonoBehaviour
             
         }
         
-        
-        
+    }
+    public void SetScore() 
+    {
+        score = (int)this.transform.position.y;
+
+        currentScoreTxt.text = $" Score {score}M";
+        highScoreTxt.text = $" High Score {highScore}M";
+
+
+        if (score >= highScore)
+        {
+            highScore = score;
+        }
+        else if(score < highScore) return;
+
+    }
+
+    public void ChageFuel()
+    {
+        if(fuel == 100f) return;
+        else if(fuel != 100f)
+        {
+            fuel += 0.1f;
+        }
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene("RocketLauncher");
     }
 }
